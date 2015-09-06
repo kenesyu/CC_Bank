@@ -1,0 +1,101 @@
+@font-face {
+  font-family: "iconfont";
+  src: url('../font/iconfont.eot'); /* IE9*/
+  src: url('../font/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../font/iconfont.woff') format('woff'), /* chrome、firefox */
+  url('../font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('../font/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+@fontnum0:e600;
+@fontnum1:e607;
+@fontnum2:e602;
+@fontnum3:e603;
+@fontnum4:e604;
+@fontnum5:e605;
+@fontnum6:e606;
+@fontnum7:e609;
+
+
+@fontname0:shuru;
+@fontname1:xiangji;
+@fontname2:shuru3;
+@fontname3:xiangji1;
+@fontname4:yuyin;
+@fontname5:voice;
+@fontname6:fasong;
+@fontname7:fankui;
+
+
+
+
+.icon(@i:0)when(@i<8){
+  @tempnum:'fontnum@{i}';
+  @tempnum1:@@tempnum;
+
+  @tempname:'fontname@{i}';
+  @tempname1:@@tempname;
+  /*left*/
+  *[data-icon=@{tempname1}]:before{
+    content: "\@{tempnum1}";
+    font-family: iconfont;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  *[data-icon=@{tempname1}]:after{
+    content: "";
+  }
+  /*right*/
+  *[data-icon=@{tempname1}][icon-pos=right]:before{
+    content: "";
+  }
+  *[data-icon=@{tempname1}][icon-pos=right]:after{
+    content: "\@{tempnum1}";
+    font-family: iconfont;
+    text-align: center;
+    float: right;
+    color: #ccc;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /*top*/
+  *[data-icon=@{tempname1}][icon-pos=top]:before{
+    content: "\@{tempnum1}";
+    font-family: iconfont;
+    text-align: center;
+    display: block;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  *[data-icon=@{tempname1}][icon-pos=top]:after{
+    content: "";
+  }
+
+  /*bottom*/
+  *[data-icon=@{tempname1}][icon-pos=bottom]:before{
+    content: "";
+  }
+  *[data-icon=@{tempname1}][icon-pos=bottom]:after{
+    content: "\@{tempnum1}";
+    font-family: iconfont;
+    text-align: center;
+    display: block;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .icon(@i+1);
+}
+.icon();
+
+
+
+
+
+
+
+

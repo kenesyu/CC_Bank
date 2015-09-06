@@ -5,6 +5,7 @@ using System.Web;
 using System.Net;
 using System.IO;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace Bank.QYAPI
 {
@@ -88,6 +89,28 @@ namespace Bank.QYAPI
                 }
             }
             return result;
+        }
+
+        public static long ConvertDateTimeInt(System.DateTime time)
+        {
+            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+            return (long)(time - startTime).TotalSeconds;
+        }
+
+        public static string getNoncestr()
+        {
+            Random random = new Random();
+            return MD5Util.GetMD5(random.Next(1000).ToString(), "GBK");
+        }
+
+        public static string EncryptToSHA1(string str)
+        {
+            SHA1 sha1 = new SHA1CryptoServiceProvider();
+            byte[] bytes_sha1_in = System.Text.UTF8Encoding.Default.GetBytes(str);
+            byte[] bytes_sha1_out = sha1.ComputeHash(bytes_sha1_in);
+            string str_sha1_out = BitConverter.ToString(bytes_sha1_out);
+            str_sha1_out = str_sha1_out.Replace("-", "").ToLower();
+            return str_sha1_out;
         }
     }
 }

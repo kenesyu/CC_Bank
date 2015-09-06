@@ -11,6 +11,8 @@ namespace Bank.QYAPI
     {
         //privaet static string AppID = 
         private static DateTime GetAccessToken_Time;
+
+        private static DateTime GetJSAPITicket_Time;
         /// <summary>
         /// 过期时间为7200秒
         /// </summary>
@@ -36,6 +38,24 @@ namespace Bank.QYAPI
                 return mAccessToken;
             }
         }
+
+
+        private static string mJSAPITicket;
+        public static string JSAPITicket
+        {
+            get
+            {
+                //如果为空，或者过期，需要重新获取
+                if (string.IsNullOrEmpty(mJSAPITicket) || HasExpiredTiecket())
+                {
+                    //获取
+                    mJSAPITicket = GetJsAPITicket(AccessToken);
+                }
+
+                return mJSAPITicket;
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -69,6 +89,37 @@ namespace Bank.QYAPI
 
             return null;
         }
+
+        private static string GetJsAPITicket(string AccessToken) {
+
+            string url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token={0}", AccessToken);
+            string result = HttpUtility.GetData(url);
+
+            XDocument doc = XmlUtility.ParseJson(result, "root");
+            XElement root = doc.Root;
+            if (root != null)
+            {
+                XElement jsapi_ticket = root.Element("ticket");
+                if (jsapi_ticket != null)
+                {
+                    GetJSAPITicket_Time = DateTime.Now;
+                    if (root.Element("expires_in") != null)
+                    {
+                        Expires_Period = int.Parse(root.Element("expires_in").Value);
+                    }
+                    return jsapi_ticket.Value;
+                }
+                else
+                {
+                    GetJSAPITicket_Time = DateTime.MinValue;
+                }
+            }
+
+            return null;
+        }
+
+
+
         /// <summary>
         /// 判断Access_token是否过期
         /// </summary>
@@ -79,6 +130,20 @@ namespace Bank.QYAPI
             {
                 //过期时间，允许有一定的误差，一分钟。获取时间消耗
                 if (DateTime.Now > GetAccessToken_Time.AddSeconds(Expires_Period).AddSeconds(-60))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        private static bool HasExpiredTiecket()
+        {
+            if (GetJSAPITicket_Time != null)
+            {
+                //过期时间，允许有一定的误差，一分钟。获取时间消耗
+                if (DateTime.Now > GetJSAPITicket_Time.AddSeconds(Expires_Period).AddSeconds(-60))
                 {
                     return true;
                 }
