@@ -13,53 +13,12 @@
     <title>申请页面</title>
     <link rel="stylesheet" href="css/style.css"/>
     <link rel="stylesheet" href="css/font.css"/>
-    <script src="css/zepto.js"></script>
-    <script src="css/z_touch.js"></script>
-        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="css/zepto.js" type="text/javascript"></script>
+    <script src="css/z_touch.js" type="text/javascript"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="css/Weixin.js?v=20150909_03" type="text/javascript"></script>
     <script>
-        wx.config({
-        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: '<%=appid %>', // 必填，企业号的唯一标识，此处填写企业号corpid
-            timestamp: <%=timestamp %>, // 必填，生成签名的时间戳
-            nonceStr: '<%=noncestr %>', // 必填，生成签名的随机串
-            signature: '<%=signature %>',// 必填，签名，见附录1
-            jsApiList: ['checkJsApi',
-        'onMenuShareTimeline',
-        'onMenuShareAppMessage',
-        'onMenuShareQQ',
-        'onMenuShareWeibo',
-        'onMenuShareQZone',
-        'hideMenuItems',
-        'showMenuItems',
-        'hideAllNonBaseMenuItem',
-        'showAllNonBaseMenuItem',
-        'translateVoice',
-        'startRecord',
-        'stopRecord',
-        'onVoiceRecordEnd',
-        'playVoice',
-        'onVoicePlayEnd',
-        'pauseVoice',
-        'stopVoice',
-        'uploadVoice',
-        'downloadVoice',
-        'chooseImage',
-        'previewImage',
-        'uploadImage',
-        'downloadImage',
-        'getNetworkType',
-        'openLocation',
-        'getLocation',
-        'hideOptionMenu',
-        'showOptionMenu',
-        'closeWindow',
-        'scanQRCode',
-        'chooseWXPay',
-        'openProductSpecificView',
-        'addCard',
-        'chooseCard',
-        'openCard'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-    });
+        WeiXin.RegisterWeiXin('<%=appid %>',<%=timestamp %>,'<%=noncestr %>','<%=signature %>');
     </script>
 </head>
 <body>
@@ -67,7 +26,7 @@
 <div class="applyBox">
     <div class="applyL">印章申请</div>
     <div class="applyR">
-        <input type="text" id=placeholder placeholder="输入标题" >
+        <input type="text" id="txtTitle" runat="server" placeholder="输入标题" >
     </div>
 </div>
 
@@ -100,9 +59,9 @@
 </div>
 <!--文档拍照-->
 <div class="applyBox">
-    <div class="applyL">文档拍照</div>
+    <div class="applyL">文件拍照</div>
     <div class="applyR">
-        <div class="paizhao ccc" data-icon="xiangji"></div>
+        <div class="paizhao ccc" data-icon="xiangji" onclick="WeiXin.ChoseImg()"></div>
     </div>
 </div>
 <!--语音-->
