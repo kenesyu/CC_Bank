@@ -56,8 +56,11 @@
   <ItemGroup>
     <Content Include="application.html" />
     <Content Include="ApplyProgram.aspx" />
+    <Content Include="BussinessService\MarkSysService.asmx" />
     <Content Include="CreateMenu.aspx" />
     <Content Include="css\font.css" />
+    <Content Include="css\IsTech_core.js" />
+    <Content Include="css\IsTech_form.js" />
     <Content Include="css\jquery.js" />
     <Content Include="css\jquery.min.js" />
     <Content Include="css\style.css" />
@@ -84,6 +87,10 @@
     </Compile>
     <Compile Include="ApplyProgram.aspx.designer.cs">
       <DependentUpon>ApplyProgram.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BussinessService\MarkSysService.asmx.cs">
+      <DependentUpon>MarkSysService.asmx</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="ClsLib\DataBaseHelper.cs" />
     <Compile Include="ClsLib\UserList.cs" />
@@ -126,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="download\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Site.Master" />

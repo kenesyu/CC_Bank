@@ -112,5 +112,31 @@ namespace Bank.QYAPI
             str_sha1_out = str_sha1_out.Replace("-", "").ToLower();
             return str_sha1_out;
         }
+
+        public static string HttpDownloadFile(string url, string path)
+        {
+            // 设置参数
+            HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+            //发送请求并获取相应回应数据
+            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+
+            string filename = Guid.NewGuid() + "." + response.Headers.Get(1).Replace("\"", "").Split('.')[1];
+            string newpath = path + filename;
+
+            //直到request.GetResponse()程序才开始向目标网页发送Post请求
+            Stream responseStream = response.GetResponseStream();
+            //创建本地文件写入流
+            Stream stream = new FileStream(newpath, FileMode.Create);
+            byte[] bArr = new byte[1024];
+            int size = responseStream.Read(bArr, 0, (int)bArr.Length);
+            while (size > 0)
+            {
+                stream.Write(bArr, 0, size);
+                size = responseStream.Read(bArr, 0, (int)bArr.Length);
+            }
+            stream.Close();
+            responseStream.Close();
+            return filename;
+        }
     }
 }

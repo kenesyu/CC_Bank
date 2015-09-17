@@ -8,21 +8,23 @@
     <meta charset="UTF-8">
     <meta name ="viewport" content ="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1,user-scalable=no">
     <meta name="description" content="">
-    <meta name="author" content="Mosaddek">
-    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
-    <title>申请页面</title>
+    <title>印章申请</title>
     <link rel="stylesheet" href="css/style.css"/>
     <link rel="stylesheet" href="css/font.css"/>
     <script src="css/zepto.js" type="text/javascript"></script>
     <script src="css/z_touch.js" type="text/javascript"></script>
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <script src="css/Weixin.js?v=20150909_03" type="text/javascript"></script>
+    <script src="css/Weixin.js?v=20150916_01" type="text/javascript"></script>
+    <script src="css/jquery.js" type="text/javascript"></script>
+    <script src="css/IsTech_core.js" type="text/javascript"></script>
+    <script src="css/IsTech_form.js" type="text/javascript"></script>
     <script>
         WeiXin.RegisterWeiXin('<%=appid %>',<%=timestamp %>,'<%=noncestr %>','<%=signature %>');
     </script>
 </head>
 <body>
 <!--标题-->
+<form runat="server" id="form1">
 <div class="applyBox">
     <div class="applyL">印章申请</div>
     <div class="applyR">
@@ -35,12 +37,18 @@
     <div class="applyL">审批流程</div>
     <div class="applyR">
         <div class="sel_wrap" id="sel_wrap">
-            <span id="span">请选择审批流程</span>
-            <select class="select" name="" id="c_select">
-                <option value="0">张三</option>
-                <option value="1">李四</option>
-                <option value="2">王五</option>
-                <option value="3">赵六</option>
+            <span id="span">审批流程</span>
+            <select class="select" name="" id="sel_Program" runat="server">
+            </select>
+        </div>
+    </div>
+</div>
+<div class="applyBox">
+    <div class="applyL">印章</div>
+    <div class="applyR">
+        <div class="sel_wrap" id="sel_wrapc">
+            <span id="span1">印章</span>
+            <select class="select" name="" id="sel_Mark" runat="server">
             </select>
         </div>
     </div>
@@ -51,7 +59,7 @@
     <div class="applyR">
         <div class="sel_wrap" id="sel_wrapp">
             <span>审批人</span>
-            <select class="select" name="" id="c_selectt" runat="server">
+            <select class="select" name="" id="sel_S" runat="server">
 
             </select>
         </div>
@@ -61,7 +69,12 @@
 <div class="applyBox">
     <div class="applyL">文件拍照</div>
     <div class="applyR">
-        <div class="paizhao ccc" data-icon="xiangji" onclick="WeiXin.ChoseImg()"></div>
+        <div class="paizhao ccc" data-icon="xiangji" id="btnCam" onclick="WeiXin.ChoseImg()"></div>
+    </div>
+</div>
+<div class="applyBox">
+    <div class="applyL">图片预览</div>
+    <div class="applyR" id="divImgPreview">
     </div>
 </div>
 <!--语音-->
@@ -83,17 +96,32 @@
 </div>
 
 <!--申请-->
-<div class="applyBox padding">
-    <a href="#"><div class="applybtn ">申请</div></a>
+<div class="applyBox padding" align="center">
+    <asp:TextBox ID="txtMedid" runat="server"></asp:TextBox>
+    <asp:Button ID="btnApply" runat="server" Text="申请" class="applybtn" 
+        onclick="btnApply_Click" OnClientClick="return Submit()" />
+<%--    <a href="#"><div class="applybtn ">申请</div></a>--%>
 </div>
+
+</form>
 </body>
 </html>
+<script>
+    function Submit() {
+        var medid = "";
+        $("#divImgPreview").find("img").each(function () {
+            medid += $(this).attr("medid") + ",";
+        })
+        $("#txtMedid").val(medid);
+        return false;
+    }
+</script>
 <script>
     $(function () {
         function a(x) {
             return document.getElementById(x);
         }
-        var sel = a("c_select");
+        var sel = a("sel_Program");
         var wrap = a("sel_wrap");
         var result = wrap.getElementsByTagName("span");
         wrap.onmouseover = function () {
@@ -102,7 +130,7 @@
         wrap.onmouseout = function () {
             this.style.backgroundColor = "#fafafa";
         }
-        sel.onchange = function () {
+        sel.onclick = function () {
             var opt = this.getElementsByTagName("option");
             var len = opt.length;
             for (i = 0; i < len; i++) {
@@ -111,8 +139,9 @@
                 }
             }
             result[0].innerHTML = x;
+            WeiXin.GetMarkByType($("#sel_Program").val());
         }
-        var sell = a("c_selectt");
+        var sell = a("sel_S");
         var wrapp = a("sel_wrapp");
         var resultt = wrapp.getElementsByTagName("span");
         wrapp.onmouseover = function () {
@@ -121,7 +150,7 @@
         wrapp.onmouseout = function () {
             this.style.backgroundColor = "#fafafa";
         }
-        sell.onchange = function () {
+        sell.onclick = function () {
             var opt = this.getElementsByTagName("option");
             var len = opt.length;
             for (i = 0; i < len; i++) {
@@ -133,7 +162,24 @@
         }
 
 
+        var sell = a("sel_Mark");
+        var wrapp = a("sel_wrapc");
+        var resultt = wrapp.getElementsByTagName("span");
+        wrapp.onmouseover = function () {
+            this.style.backgroundColor = "#fff";
+        }
+        wrapp.onmouseout = function () {
+            this.style.backgroundColor = "#fafafa";
+        }
+        sell.onclick = function () {
+            var opt = this.getElementsByTagName("option");
+            var len = opt.length;
+            for (i = 0; i < len; i++) {
+                if (opt[i].selected == true) {
+                    x = opt[i].innerHTML;
+                }
+            }
+            resultt[0].innerHTML = x;
+        }
     })
-
-
 </script>

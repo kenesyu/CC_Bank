@@ -6,40 +6,45 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Bank.QYAPI;
 using System.Configuration;
+using System.Net;
+using System.IO;
 namespace Bank
 {
     public partial class test : System.Web.UI.Page
     {
-        public string appid = ConfigurationManager.AppSettings["corpid"].ToString();
-        public string timestamp = QYAPI.HttpUtility.ConvertDateTimeInt(DateTime.Now).ToString();
-        public string jsticket = QYAPI.API_Token.JSAPITicket;
-        public string noncestr = QYAPI.HttpUtility.getNoncestr();
-        public string signature = string.Empty;
-        //public string 
-
-
         protected void Page_Load(object sender, EventArgs e)
         {
-            //string aa = ;
-            signature = QYAPI.HttpUtility.EncryptToSHA1("jsapi_ticket=" + jsticket + "&noncestr=" + noncestr + "&timestamp=" + timestamp + "&url=" + Request.Url.ToString());
+            string url = "https://qyapi.weixin.qq.com/cgi-bin/media/get?access_token=" + QYAPI.API_Token.AccessToken + "&media_id=Xeqf1K3zkLAMuGGfO3_iDsfm0D6HjPsYn7lqRAESY92KLnBfXHGISA6gv_DNOC7J";
+            //string aa = QYAPI.HttpUtility.GetData(url);
 
-            //string aa = QYAPI.HttpUtility.GetData("https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token="+QYAPI.API_Token.AccessToken+"&id=1");
+            HttpDownloadFile(url,Server.MapPath("download/"));
+            //string aa = QYAPI.HttpUtility.SendPostHttpRequest("https://qyapi.weixin.qq.com/cgi-bin/material/batchget?access_token=" + QYAPI.API_Token.AccessToken,"post","{\"type\": \"image\",    \"agentid\": 3,    \"offset\": 0,    \"count\": 50}");
+        }
 
-            //string url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + QYAPI.API_Token.AccessToken;
-            //string data = "{ " 
-            //                + " \"touser\": \"yz\","
-            //                + " \"toparty\": \"\","
-            //                + " \"totag\": \"\","
-            //                + " \"msgtype\": \"text\","
-            //                + " \"agentid\": \"1\","
-            //                + " \"text\": {"
-            //                + "     \"content\": \"test message <a href='http://www.sina.com.cn'>连接</a>\" "
-            //                + " },"
-            //                + " \"safe\":\"0\" "
-            //                + " }";
 
-            //string result = QYAPI.HttpUtility.SendPostHttpRequest(url, "post", data);
+        public static string HttpDownloadFile(string url, string path)
+        {
+            // 设置参数
+            HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+            //发送请求并获取相应回应数据
+            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
 
+            string newpath = path + Guid.NewGuid() + "." + response.Headers.Get(1).Replace("\"", "").Split('.')[1];
+
+            //直到request.GetResponse()程序才开始向目标网页发送Post请求
+            Stream responseStream = response.GetResponseStream();
+            //创建本地文件写入流
+            Stream stream = new FileStream(newpath, FileMode.Create);
+            byte[] bArr = new byte[1024];
+            int size = responseStream.Read(bArr, 0, (int)bArr.Length);
+            while (size > 0)
+            {
+                stream.Write(bArr, 0, size);
+                size = responseStream.Read(bArr, 0, (int)bArr.Length);
+            }
+            stream.Close();
+            responseStream.Close();
+            return path;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Bank.QYAPI;
 using System.Text;
+using System.Configuration;
 
 namespace Bank
 {
@@ -13,7 +14,7 @@ namespace Bank
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Create(1);
+            Create(3);
         }
 
         private void Create(int Appid) {
@@ -24,7 +25,7 @@ namespace Bank
             sb.AppendLine("         {");
             sb.AppendLine("             \"type\":\"view\", ");
             sb.AppendLine("             \"name\":\"用章申请\", ");
-            sb.AppendLine("             \"url\":\"http://www.baidu.com\" ");
+            sb.AppendLine("             \"url\":\"" + ConfigurationManager.AppSettings["domainname"].ToString() + "ApplyProgram.aspx\" ");
             sb.AppendLine("         },");
             sb.AppendLine("         {");
             sb.AppendLine("             \"type\":\"view\", ");
@@ -34,7 +35,7 @@ namespace Bank
             sb.AppendLine("     ]");
             sb.AppendLine("}");
             string result = QYAPI.HttpUtility.SendPostHttpRequest(url, "post", sb.ToString());
-        
+            Response.Write(result);
 
         }
     }

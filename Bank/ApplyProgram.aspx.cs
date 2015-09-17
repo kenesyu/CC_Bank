@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using Bank.ClsLib;
+using System.Data;
 
 namespace Bank
 {
@@ -24,7 +25,12 @@ namespace Bank
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+            BindData();
+        }
+
+
+
+        private void BindData() { 
             signature = QYAPI.HttpUtility.EncryptToSHA1("jsapi_ticket=" + jsticket + "&noncestr=" + noncestr + "&timestamp=" + timestamp + "&url=" + Request.Url.ToString());
 
             string url = "https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?access_token=" + QYAPI.API_Token.AccessToken + "&department_id=3&fetch_child=0&status=1";
@@ -34,37 +40,30 @@ namespace Bank
             JsonSerializer serializer = new JsonSerializer();
             UserList ulist = (UserList)serializer.Deserialize(new JsonTextReader(sr), typeof(UserList));
 
-            this.c_selectt.Items.Clear();
-            this.c_selectt.Items.Add(new ListItem("---审批人---", ""));
-
+            this.sel_S.Items.Clear();
             if (ulist.errcode == "0")
             {
                 foreach (User u in ulist.userlist)
                 {
-                    this.c_selectt.Items.Add(new ListItem(u.name, u.userid));
+                    this.sel_S.Items.Add(new ListItem(u.name, u.userid));
                 }
             }
-            //JObject jo = (JObject)JsonConvert.DeserializeObject(result);
 
-            //string zone = jo["beijing"]["zone"].ToString();
-            //string zone_en = jo["beijing"]["zone_en"].ToString();  
-            
-            //string aa = QYAPI.HttpUtility.GetData("https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token="+QYAPI.API_Token.AccessToken+"&id=1");
+            DataBaseHelper dbHelper = new DataBaseHelper(ConfigurationManager.ConnectionStrings["DB"].ToString());
+            DataTable dtMarkType = dbHelper.ExecuteDataTable("select * from T_MarkType");
+            this.sel_Program.Items.Clear();
+            foreach (DataRow dr in dtMarkType.Rows) {
+                this.sel_Program.Items.Add(new ListItem(dr["TypeName"].ToString(), dr["TypeID"].ToString()));
+            }
+            dbHelper.Dispose();
+        }
 
-            //string url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + QYAPI.API_Token.AccessToken;
-            //string data = "{ " 
-            //                + " \"touser\": \"yz\","
-            //                + " \"toparty\": \"\","
-            //                + " \"totag\": \"\","
-            //                + " \"msgtype\": \"text\","
-            //                + " \"agentid\": \"1\","
-            //                + " \"text\": {"
-            //                + "     \"content\": \"test message <a href='http://www.sina.com.cn'>连接</a>\" "
-            //                + " },"
-            //                + " \"safe\":\"0\" "
-            //                + " }";
+        protected void btnApply_Click(object sender, EventArgs e)
+        {
 
-            //string result = QYAPI.HttpUtility.SendPostHttpRequest(url, "post", data);
+
+
+
 
         }
     }
