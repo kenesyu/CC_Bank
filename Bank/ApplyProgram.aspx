@@ -37,7 +37,7 @@
     <div class="applyL">审批流程</div>
     <div class="applyR">
         <div class="sel_wrap" id="sel_wrap">
-            <span id="span">审批流程</span>
+            <span id="span">请选择</span>
             <select class="select" name="" id="sel_Program" runat="server">
             </select>
         </div>
@@ -47,7 +47,7 @@
     <div class="applyL">印章</div>
     <div class="applyR">
         <div class="sel_wrap" id="sel_wrapc">
-            <span id="span1">印章</span>
+            <span id="span1">请选择</span>
             <select class="select" name="" id="sel_Mark" runat="server">
             </select>
         </div>
@@ -58,7 +58,7 @@
     <div class="applyL">审批人</div>
     <div class="applyR">
         <div class="sel_wrap" id="sel_wrapp">
-            <span>审批人</span>
+            <span id="span2">请选择</span>
             <select class="select" name="" id="sel_S" runat="server">
 
             </select>
@@ -130,7 +130,7 @@
         wrap.onmouseout = function () {
             this.style.backgroundColor = "#fafafa";
         }
-        sel.onclick = function () {
+        sel.onchange = function () {
             var opt = this.getElementsByTagName("option");
             var len = opt.length;
             for (i = 0; i < len; i++) {
@@ -150,7 +150,7 @@
         wrapp.onmouseout = function () {
             this.style.backgroundColor = "#fafafa";
         }
-        sell.onclick = function () {
+        sell.onchange = function () {
             var opt = this.getElementsByTagName("option");
             var len = opt.length;
             for (i = 0; i < len; i++) {
@@ -164,14 +164,14 @@
 
         var sell = a("sel_Mark");
         var wrapp = a("sel_wrapc");
-        var resultt = wrapp.getElementsByTagName("span");
+        var resulttt = wrapp.getElementsByTagName("span");
         wrapp.onmouseover = function () {
             this.style.backgroundColor = "#fff";
         }
         wrapp.onmouseout = function () {
             this.style.backgroundColor = "#fafafa";
         }
-        sell.onclick = function () {
+        sell.onchange = function () {
             var opt = this.getElementsByTagName("option");
             var len = opt.length;
             for (i = 0; i < len; i++) {
@@ -179,7 +179,7 @@
                     x = opt[i].innerHTML;
                 }
             }
-            resultt[0].innerHTML = x;
+            resulttt[0].innerHTML = x;
         }
     })
 </script>

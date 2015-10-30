@@ -78,10 +78,13 @@ var WeiXin = {
             if ($("string", response).text() != "") {
                 var result = $("string", response).text();
                 var list = result.split("|");
-                for (i = 0; i < list.length; i++) { 
-                
+                $("#sel_Mark").empty();
+                $("#sel_Mark").append("<option value=''>请选择</option>");
+                for (i = 0; i < list.length; i++) {
+                    $("#sel_Mark").append("<option value='" + list[i].split(',')[0] + "'>" + list[i].split(',')[1] + "</option>");
                 }
-                alert($("string", response).text());
+                //$("#sel_Mark#elem")[0].selectedIndex = 0;
+                $("#span1").html("请选择");
             }
         }, true);
 

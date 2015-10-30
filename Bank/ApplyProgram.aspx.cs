@@ -43,6 +43,7 @@ namespace Bank
             this.sel_S.Items.Clear();
             if (ulist.errcode == "0")
             {
+                this.sel_S.Items.Add(new ListItem("请选择", ""));
                 foreach (User u in ulist.userlist)
                 {
                     this.sel_S.Items.Add(new ListItem(u.name, u.userid));
@@ -52,6 +53,7 @@ namespace Bank
             DataBaseHelper dbHelper = new DataBaseHelper(ConfigurationManager.ConnectionStrings["DB"].ToString());
             DataTable dtMarkType = dbHelper.ExecuteDataTable("select * from T_MarkType");
             this.sel_Program.Items.Clear();
+            this.sel_Program.Items.Add(new ListItem("请选择", ""));
             foreach (DataRow dr in dtMarkType.Rows) {
                 this.sel_Program.Items.Add(new ListItem(dr["TypeName"].ToString(), dr["TypeID"].ToString()));
             }

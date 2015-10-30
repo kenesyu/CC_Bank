@@ -14,10 +14,16 @@ namespace Bank
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            string url = "https://qyapi.weixin.qq.com/cgi-bin/media/get?access_token=" + QYAPI.API_Token.AccessToken + "&media_id=Xeqf1K3zkLAMuGGfO3_iDsfm0D6HjPsYn7lqRAESY92KLnBfXHGISA6gv_DNOC7J";
+            string data = "{ \"zid\": \"2506\", \"formhash\": \"30cbbfb2\"}";
+            string aa = QYAPI.HttpUtility.SendHttpRequest("http://nantong.iydwl.com/plugin.php?id=hejin_toupiao&model=clicks&vid=5&zid=2506&formhash=30cbbfb2",data);
+
+            Response.Write(aa);
+
+
+            //string url = "https://qyapi.weixin.qq.com/cgi-bin/media/get?access_token=" + QYAPI.API_Token.AccessToken + "&media_id=Xeqf1K3zkLAMuGGfO3_iDsfm0D6HjPsYn7lqRAESY92KLnBfXHGISA6gv_DNOC7J";
             //string aa = QYAPI.HttpUtility.GetData(url);
 
-            HttpDownloadFile(url,Server.MapPath("download/"));
+            //HttpDownloadFile(url,Server.MapPath("download/"));
             //string aa = QYAPI.HttpUtility.SendPostHttpRequest("https://qyapi.weixin.qq.com/cgi-bin/material/batchget?access_token=" + QYAPI.API_Token.AccessToken,"post","{\"type\": \"image\",    \"agentid\": 3,    \"offset\": 0,    \"count\": 50}");
         }
 
